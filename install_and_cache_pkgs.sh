@@ -4,7 +4,7 @@
 set -ex
 
 apt-get update
-apt-get install -y curl
+apt-get install -y curl aria2 wget
 
 # Debug mode for diagnosing issues.
 # Setup first before other operations.
@@ -42,7 +42,11 @@ log_empty_line
 
 log "Installing apt-fast for optimized installs..."
 # Install apt-fast for optimized installs.
-/bin/bash -c "$(curl -sL https://git.io/vokNn)"
+wget https://raw.githubusercontent.com/dopstar/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
+chmod +x /usr/local/sbin/apt-fast
+if ! [[ -f /etc/apt-fast.conf ]]; then
+  wget https://raw.githubusercontent.com/dopstar/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
+fi
 log "done"
 
 log_empty_line

@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Fail on any error.
-set -e
+set -ex
 
 # Debug mode for diagnosing issues.
 # Setup first before other operations.
 debug="${4}"
-test ${debug} == "true" && set -x
+# test ${debug} == "true" && set -x
 
 # Include library.
 script_dir="$(dirname -- "$(realpath -- "${0}")")"

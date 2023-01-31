@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail on any error.
-set -e
+set -ex
 
 # Include library.
 script_dir="$(dirname -- "$(realpath -- "${0}")")"
@@ -23,7 +23,7 @@ execute_install_scripts="${4}"
 
 # Debug mode for diagnosing issues.
 debug="${5}"
-test ${debug} == "true" && set -x
+# test ${debug} == "true" && set -x
 
 # List of the packages to use.
 packages="${@:6}"

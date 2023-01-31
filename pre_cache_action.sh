@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # Include library.
 script_dir="$(dirname -- "$(realpath -- "${0}")")"
@@ -10,7 +10,7 @@ source "${script_dir}/lib.sh"
 # Setup first before other operations.
 debug="${4}"
 validate_bool "${debug}" debug 1
-test ${debug} == "true" && set -x
+# test ${debug} == "true" && set -x
 
 # Directory that holds the cached packages.
 cache_dir="${1}"

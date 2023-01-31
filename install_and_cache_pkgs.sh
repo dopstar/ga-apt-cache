@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Fail on any error.
-set -e
+set -ex
+
+apt-get install -y curl
 
 # Debug mode for diagnosing issues.
 # Setup first before other operations.
 debug="${2}"
-test ${debug} == "true" && set -x
+# test ${debug} == "true" && set -x
 
 # Include library.
 script_dir="$(dirname -- "$(realpath -- "${0}")")"
@@ -44,10 +46,11 @@ log "done"
 
 log_empty_line
 
+ls -lah /var/cache/apt
 log "Updating APT package list..."
 last_update_delta_s=$(($(date +%s) - $(date +%s -r /var/cache/apt/pkgcache.bin)))
 if test $last_update_delta_s -gt 300; then
-  sudo apt-fast update > /dev/null
+  apt-fast update > /dev/null
   log "done"
 else
   log "skipped (fresh by ${last_update_delta_s} seconds)"
@@ -64,7 +67,7 @@ install_log_filepath="${cache_dir}/install.log"
 
 log "Clean installing ${package_count} packages..."
 # Zero interaction while installing or upgrading the system via apt.
-sudo DEBIAN_FRONTEND=noninteractive apt-fast --yes install ${normalized_packages} > "${install_log_filepath}"
+DEBIAN_FRONTEND=noninteractive apt-fast --yes install ${normalized_packages} > "${install_log_filepath}"
 log "done"
 log "Installation log written to ${install_log_filepath}"
 
@@ -94,7 +97,7 @@ for installed_package in ${installed_packages}; do
       & get_install_filepath "" "${package_name}" "postinst"; } |
       while IFS= read -r f; do test -f "${f}" -o -L "${f}" && get_tar_relpath "${f}"; done |
       xargs -I {} echo \"{}\" |
-      sudo xargs tar -cf "${cache_filepath}" -C /
+      xargs tar -cf "${cache_filepath}" -C /
 
     log "    done (compressed size $(du -h "${cache_filepath}" | cut -f1))."
   fi

@@ -3,6 +3,7 @@
 # Fail on any error.
 set -ex
 
+apt-get update
 apt-get install -y curl
 
 # Debug mode for diagnosing issues.
